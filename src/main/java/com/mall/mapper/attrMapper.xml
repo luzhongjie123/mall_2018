@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mall.mapper.attrMapper" >
+    <resultMap id="SELECT_T_MALL_ATTR_MAP" type="com.mall.bean.OBJECT_T_MALL_ATTR" autoMapping="true">
+        <result property="id" column="attr_id"></result>
+        <collection property="list_value" ofType="com.mall.bean.T_MALL_VALUE" autoMapping="true">
+            <result property="id" column="val_id"></result>
+        </collection>
+    </resultMap>
+
+    <select id="get_attr_list" parameterType="int" resultMap="SELECT_T_MALL_ATTR_MAP">
+
+    select  attr.id as attr_id,attr.*,val.id as val_id,val.* from
+    t_mall_attr attr,t_mall_value val where attr.Id=val.shxm_id and attr.flbh2=#{flbh2}
+    </select>
+
+    <insert useGeneratedKeys="true" keyProperty="attr.id" keyColumn="id"
+            id="insert_attr" >
+    insert into t_mall_attr(shxm_mch,flbh2) values(
+    #{attr.shxm_mch},#{flbh2}
+    )
+    </insert>
+
+    <insert id="insert_value" parameterType="java.util.ArrayList">
+    insert into t_mall_value(shxzh,shxm_id,shxzh_mch) values
+    <foreach collection="t_mall_value" item="val" separator=",">
+        (#{val.shxzh},#{attr_id},#{val.shxzh_mch})
+    </foreach>
+    </insert>
+    
+    
+
+
+
+</mapper>
